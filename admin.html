@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-crt="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cormac's Restaurant - Owner Mode</title>
+    <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+
+  <body>
+    <div class="cabinet">
+      <div class="screen">
+        <div class="topbar" id="topbar"></div>
+
+        <div id="status"></div>
+
+        <header class="marquee">
+          <div>
+            <h1>OWNER MODE</h1>
+            <p class="subtitle">EVERY TABLE, EVERY SITTING</p>
+          </div>
+        </header>
+
+        <section class="panel panel--yellow" id="summary"></section>
+
+        <div id="message" aria-live="polite"></div>
+
+        <section class="panel panel--cyan" id="days"></section>
+
+        <p class="footer">
+          This page has no password, because a static page cannot check one. Anyone with the link
+          can see the bookings.
+        </p>
+      </div>
+    </div>
+
+    <script type="module" src="js/admin.js"></script>
+  </body>
+</html>

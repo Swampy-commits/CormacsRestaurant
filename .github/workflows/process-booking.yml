@@ -1,0 +1,38 @@
+name: Process booking
+
+# The backend. A booking issue arrives, this checks it against the rules and writes it into
+# data/bookings.json, then answers on the issue and closes it.
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  process:
+    # Ignore any issue that isn't from the booking form.
+    if: >-
+      startsWith(github.event.issue.title, 'booking:') ||
+      startsWith(github.event.issue.title, 'cancel:')
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Record the booking
+        # The issue body is passed as an environment variable, never interpolated into the
+        # script, so nothing a booker types can become a shell command.
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: bash .github/scripts/write-booking.sh
+
+      - name: Reply on the issue
+        # Runs even if the step above failed, so a booker always gets an answer.
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: node .github/scripts/reply.js

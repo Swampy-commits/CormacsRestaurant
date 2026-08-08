@@ -1,0 +1,16 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The booking rules decide whether a table is free, and they run in the browser and in the
+# Action. If they break, the restaurant double-books. So they run on every push.
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node --test

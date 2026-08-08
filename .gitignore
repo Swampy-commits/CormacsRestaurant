@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+
+# There are no dependencies, so there should never be a node_modules here. If one appears,
+# something has gone wrong.
+node_modules/

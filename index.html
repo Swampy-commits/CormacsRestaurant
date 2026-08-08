@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-crt="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cormac's Restaurant - Book a table</title>
+    <meta name="description" content="Book a table at Cormac's Restaurant. Breakfast and dinner, inside or outside." />
+    <meta name="color-scheme" content="dark" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+
+  <body>
+    <div class="cabinet">
+      <div class="screen">
+        <div class="topbar" id="topbar"></div>
+
+        <div id="status"></div>
+
+        <header class="marquee">
+          <div class="marquee__art">
+            <div id="chef-art"></div>
+            <div id="cash-pile"></div>
+          </div>
+          <div>
+            <h1 id="restaurant-name">CORMAC'S RESTAURANT</h1>
+            <p class="subtitle">BREAKFAST &amp; DINNER &middot; 7 DAYS</p>
+            <p class="insert-coin">&#9733; INSERT COIN &#9733;</p>
+          </div>
+        </header>
+
+        <section class="panel panel--yellow">
+          <p class="chef-note" id="chef-note"></p>
+        </section>
+
+        <section class="panel panel--cyan">
+          <h2>- BOOK A TABLE -</h2>
+          <div class="controls" id="controls"></div>
+        </section>
+
+        <div id="message" aria-live="polite"></div>
+
+        <section class="panel">
+          <div id="slots"></div>
+        </section>
+
+        <section class="panel" id="mine"></section>
+
+        <p class="footer">
+          Cormac's Restaurant. Chef is 10. Bookings are stored on GitHub, so everyone in the
+          family sees the same tables.
+        </p>
+      </div>
+    </div>
+
+    <noscript>
+      <p style="color: #fff; padding: 1rem">
+        This booking machine needs JavaScript switched on.
+      </p>
+    </noscript>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

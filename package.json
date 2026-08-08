@@ -1,0 +1,11 @@
+{
+  "name": "cormacs-restaurant",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cormac's Restaurant booking app. Static site on GitHub Pages, GitHub Actions as the backend. No dependencies.",
+  "scripts": {
+    "test": "node --test",
+    "serve": "python3 -m http.server 8000"
+  }
+}

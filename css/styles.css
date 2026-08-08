@@ -1,0 +1,883 @@
+/* ==========================================================================================
+   CORMAC'S RESTAURANT - arcade cabinet theme
+
+   Neon on black, hard 4px borders, no rounded corners anywhere. Mobile first: on a phone the
+   screen is full bleed, and the cabinet bezel only appears once there's room to waste on it.
+
+   Two escape hatches matter as much as the styling itself:
+     - [data-crt="off"] on <html> kills the scanlines and glow, for daylight on a phone.
+     - prefers-reduced-motion turns off every animation, including the takings counter.
+   ========================================================================================== */
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #0b0b12;
+  --bg-panel: #12121c;
+  --cyan: #00e5ff;
+  --magenta: #ff2e88;
+  --yellow: #ffd500;
+  --green: #00ff85;
+  --dim: #3a3a52;
+  --text: #e8e8f4;
+  --cabinet: #1c1c2a;
+
+  /* Press Start 2P is lovely as chrome and punishing as body copy, so anything you actually
+     have to read uses the monospace stack instead. */
+  --pixel: 'Press Start 2P', 'Courier New', monospace;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Courier New', monospace;
+
+  --border: 4px;
+  --gap: 1rem;
+  --glow: 0 0 6px currentColor;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: #000;
+  /* Stops iOS inflating the pixel font in landscape. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* --- CRT overlay -------------------------------------------------------------------------- */
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0,
+    rgba(0, 0, 0, 0.22) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+[data-crt='off'] body::after {
+  display: none;
+}
+
+[data-crt='off'] .glow,
+[data-crt='off'] .status__value,
+[data-crt='off'] h1,
+[data-crt='off'] h2 {
+  text-shadow: none;
+}
+
+/* --- Layout ------------------------------------------------------------------------------- */
+
+.cabinet {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0.75rem;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.panel {
+  border: var(--border) solid var(--dim);
+  background: var(--bg-panel);
+  padding: 1rem;
+}
+
+.panel--cyan {
+  border-color: var(--cyan);
+}
+
+.panel--yellow {
+  border-color: var(--yellow);
+}
+
+/* --- Typography --------------------------------------------------------------------------- */
+
+h1,
+h2,
+h3 {
+  font-family: var(--pixel);
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+  /* The pixel font has no hyphenation and very wide glyphs; without this a long word can push
+     the whole cabinet sideways on a narrow phone. */
+  overflow-wrap: break-word;
+}
+
+h1 {
+  font-size: clamp(0.95rem, 4.2vw, 1.9rem);
+  color: var(--yellow);
+  text-shadow: var(--glow);
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+
+h2 {
+  font-size: clamp(0.7rem, 2.6vw, 1rem);
+  color: var(--cyan);
+  text-shadow: var(--glow);
+}
+
+h3 {
+  font-size: clamp(0.65rem, 2.2vw, 0.85rem);
+  color: var(--text);
+}
+
+.subtitle {
+  font-family: var(--pixel);
+  font-size: clamp(0.55rem, 2.2vw, 0.8rem);
+  color: var(--cyan);
+  text-align: center;
+  letter-spacing: 0.12em;
+  margin: 0;
+}
+
+.tiny {
+  font-size: 0.8rem;
+  color: #a8a8c0;
+}
+
+a {
+  color: var(--cyan);
+}
+
+/* --- Status bar: CASH and HI -------------------------------------------------------------- */
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+  border: var(--border) solid var(--cyan);
+  background: #000;
+  padding: 0.6rem 0.8rem;
+  font-family: var(--pixel);
+  font-size: clamp(0.55rem, 2.4vw, 0.8rem);
+}
+
+.status__item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.status__label {
+  color: var(--cyan);
+}
+
+.status__value {
+  color: var(--yellow);
+  text-shadow: var(--glow);
+  font-variant-numeric: tabular-nums;
+}
+
+.status__value--flash {
+  animation: flash 0.45s steps(2, end) 3;
+}
+
+@keyframes flash {
+  50% {
+    color: var(--green);
+  }
+}
+
+/* --- Title panel and the chef ------------------------------------------------------------- */
+
+.marquee {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap);
+  align-items: center;
+  border: var(--border) solid var(--magenta);
+  background: linear-gradient(180deg, #1a1030, var(--bg-panel));
+  padding: 1rem;
+}
+
+.marquee__art {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.sprite {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.sprite--chef {
+  max-width: 120px;
+}
+
+.sprite--cash {
+  max-width: 90px;
+}
+
+.insert-coin {
+  font-family: var(--pixel);
+  font-size: clamp(0.6rem, 2.4vw, 0.85rem);
+  color: var(--magenta);
+  text-align: center;
+  text-shadow: var(--glow);
+  animation: blink 1.2s steps(2, end) infinite;
+  margin: 0.5rem 0 0;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+.chef-note {
+  border-left: var(--border) solid var(--yellow);
+  padding-left: 0.75rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.chef-note__by {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--pixel);
+  font-size: 0.6rem;
+  font-style: normal;
+  color: var(--yellow);
+}
+
+/* --- Controls ----------------------------------------------------------------------------- */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.field {
+  flex: 1 1 12rem;
+}
+
+.field__label {
+  display: block;
+  font-family: var(--pixel);
+  font-size: 0.6rem;
+  color: var(--cyan);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.08em;
+}
+
+.stepper {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.stepper__readout {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border: var(--border) solid var(--dim);
+  border-left: 0;
+  border-right: 0;
+  background: #000;
+  font-family: var(--pixel);
+  font-size: 0.75rem;
+  color: var(--yellow);
+  text-align: center;
+  padding: 0 0.5rem;
+}
+
+input[type='text'] {
+  width: 100%;
+  min-height: 48px;
+  border: var(--border) solid var(--dim);
+  background: #000;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 1rem;
+  padding: 0 0.6rem;
+}
+
+input[type='text']:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+/* --- Buttons ------------------------------------------------------------------------------ */
+
+.btn {
+  /* 48px floor: these get tapped by children on a phone. */
+  min-height: 48px;
+  min-width: 48px;
+  border: var(--border) solid var(--cyan);
+  background: #000;
+  color: var(--cyan);
+  font-family: var(--pixel);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--cyan);
+  color: #000;
+}
+
+.btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+.btn:disabled {
+  border-color: var(--dim);
+  color: var(--dim);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn--go {
+  width: 100%;
+  border-color: var(--magenta);
+  color: var(--magenta);
+  font-size: clamp(0.7rem, 3vw, 1rem);
+  padding: 1rem;
+}
+
+.btn--go:hover:not(:disabled) {
+  background: var(--magenta);
+  color: #000;
+}
+
+.btn--ghost {
+  border-width: 2px;
+  min-height: 40px;
+  font-size: 0.55rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.btn--danger {
+  border-color: var(--magenta);
+  color: var(--magenta);
+}
+
+/* --- The slot grid ------------------------------------------------------------------------ */
+
+.service + .service {
+  margin-top: 1.25rem;
+}
+
+.service__hours {
+  font-size: 0.8rem;
+  color: #a8a8c0;
+  margin: -0.4rem 0 0.75rem;
+}
+
+.slots {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tile {
+  border: var(--border) solid var(--dim);
+  background: #05050a;
+  padding: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tile--gone {
+  opacity: 0.45;
+}
+
+.tile__time {
+  font-family: var(--pixel);
+  font-size: clamp(0.75rem, 3.2vw, 1rem);
+  color: var(--yellow);
+  letter-spacing: 0.05em;
+}
+
+.tile__gone {
+  font-family: var(--pixel);
+  font-size: 0.6rem;
+  color: var(--dim);
+}
+
+/* --- Seat meters -------------------------------------------------------------------------- */
+
+.area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.area__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--pixel);
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+}
+
+.area__name {
+  color: var(--cyan);
+}
+
+.area__count {
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.meter {
+  position: relative;
+  height: 14px;
+  border: 2px solid var(--dim);
+  background: #000;
+  overflow: hidden;
+}
+
+.meter__fill {
+  height: 100%;
+  background: var(--green);
+  transition: width 0.25s steps(8, end);
+}
+
+/* Segment gaps, drawn over the fill so the bar reads as discrete pixel blocks. */
+.meter::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 6px,
+    #000 6px,
+    #000 8px
+  );
+}
+
+.meter--mid .meter__fill {
+  background: var(--yellow);
+}
+
+.meter--full .meter__fill {
+  background: var(--magenta);
+}
+
+.tile__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.tile__actions .btn {
+  flex: 1;
+  font-size: 0.55rem;
+  padding: 0.5rem 0.3rem;
+}
+
+/* --- Messages, receipt, spinner ----------------------------------------------------------- */
+
+.banner {
+  border: var(--border) solid var(--magenta);
+  background: #2a0a1a;
+  color: #ffd9e8;
+  padding: 0.8rem;
+}
+
+.banner--ok {
+  border-color: var(--green);
+  background: #052a18;
+  color: #d9ffe8;
+}
+
+.banner__title {
+  font-family: var(--pixel);
+  font-size: 0.7rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: inherit;
+}
+
+.banner ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.receipt {
+  border: var(--border) dashed var(--yellow);
+  background: #14140c;
+  color: var(--text);
+  padding: 1rem;
+  font-family: var(--mono);
+}
+
+.receipt__title {
+  font-family: var(--pixel);
+  font-size: 0.7rem;
+  color: var(--yellow);
+  text-align: center;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.receipt__line {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px dotted var(--dim);
+  padding: 0.25rem 0;
+}
+
+.receipt__total {
+  font-family: var(--pixel);
+  font-size: 0.7rem;
+  color: var(--green);
+  border-bottom: 0;
+  padding-top: 0.6rem;
+}
+
+.receipt__code {
+  font-family: var(--pixel);
+  font-size: clamp(0.8rem, 4vw, 1.2rem);
+  color: var(--yellow);
+  text-align: center;
+  letter-spacing: 0.2em;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.spinner {
+  display: inline-flex;
+  gap: 3px;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.spinner span {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  animation: hop 0.6s steps(2, end) infinite;
+}
+
+.spinner span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.spinner span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes hop {
+  50% {
+    opacity: 0.2;
+    transform: translateY(-3px);
+  }
+}
+
+/* --- Navigation and toggles --------------------------------------------------------------- */
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.nav a {
+  font-family: var(--pixel);
+  font-size: 0.55rem;
+  color: var(--cyan);
+  text-decoration: none;
+  border: 2px solid var(--dim);
+  padding: 0.5rem 0.6rem;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.nav a:hover,
+.nav a[aria-current='page'] {
+  border-color: var(--cyan);
+  background: #001a1f;
+}
+
+.toggles {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* --- Guests ------------------------------------------------------------------------------- */
+
+.guests {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.guest {
+  border: var(--border) solid var(--dim);
+  background: var(--bg-panel);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.guest__art {
+  max-width: 110px;
+  margin: 0 auto;
+}
+
+.guest__name {
+  font-family: var(--pixel);
+  font-size: 0.65rem;
+  color: var(--yellow);
+}
+
+.guest__known {
+  font-size: 0.8rem;
+  color: #a8a8c0;
+}
+
+.stars {
+  color: var(--yellow);
+  letter-spacing: 0.15em;
+  font-size: 1rem;
+}
+
+.guest__quote {
+  margin: 0;
+  font-style: italic;
+}
+
+/* --- Menu --------------------------------------------------------------------------------- */
+
+.menu-course + .menu-course {
+  margin-top: 1.5rem;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  border-bottom: 1px dotted var(--dim);
+  padding: 0.6rem 0;
+}
+
+.menu-item__price {
+  font-family: var(--pixel);
+  font-size: 0.7rem;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+.menu-item__note {
+  display: block;
+  font-size: 0.8rem;
+  color: #a8a8c0;
+}
+
+/* --- Admin -------------------------------------------------------------------------------- */
+
+.day {
+  border: var(--border) solid var(--dim);
+  background: var(--bg-panel);
+  margin-bottom: 0.75rem;
+}
+
+.day__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.7rem;
+  background: #000;
+  border-bottom: 2px solid var(--dim);
+}
+
+.day__date {
+  font-family: var(--pixel);
+  font-size: 0.7rem;
+  color: var(--cyan);
+}
+
+.day__takings {
+  font-family: var(--pixel);
+  font-size: 0.7rem;
+  color: var(--yellow);
+}
+
+.sitting {
+  padding: 0.7rem;
+  border-bottom: 1px solid var(--dim);
+}
+
+.sitting:last-child {
+  border-bottom: 0;
+}
+
+.sitting__head {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sitting__time {
+  font-family: var(--pixel);
+  font-size: 0.65rem;
+  color: var(--yellow);
+  min-width: 4.5rem;
+}
+
+.sitting__areas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 12rem;
+}
+
+.sitting__area {
+  flex: 1 1 8rem;
+  min-width: 0;
+}
+
+.booking-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0 0.5rem 0.75rem;
+  border-left: 2px solid var(--dim);
+  margin-top: 0.5rem;
+}
+
+.booking-row__who {
+  flex: 1;
+  min-width: 10rem;
+}
+
+.booking-row__code {
+  font-family: var(--pixel);
+  font-size: 0.55rem;
+  color: var(--dim);
+}
+
+.empty {
+  color: var(--dim);
+  font-style: italic;
+}
+
+/* --- Footer ------------------------------------------------------------------------------- */
+
+.footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--dim);
+  padding: 1rem 0 2rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- Bigger screens ----------------------------------------------------------------------- */
+
+@media (min-width: 600px) {
+  .slots {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .marquee {
+    grid-template-columns: auto 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  /* Only now is there room for an actual cabinet: bezel, marquee lip and all. */
+  .cabinet {
+    padding: 1.5rem;
+    border: 14px solid var(--cabinet);
+    border-top-width: 10px;
+    box-shadow:
+      inset 0 0 0 4px #000,
+      0 0 60px rgba(0, 229, 255, 0.12);
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .slots {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .sprite--chef {
+    max-width: 150px;
+  }
+}
+
+/* --- Reduced motion ----------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
