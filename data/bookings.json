@@ -10,6 +10,16 @@
       "party": 4,
       "clientRef": "e2e-1",
       "createdAt": "2026-08-08T20:22:37.484Z"
+    },
+    {
+      "id": "T6Q9QK",
+      "date": "2026-08-11",
+      "slot": "15:00",
+      "area": "outside",
+      "name": "Outside test",
+      "party": 8,
+      "clientRef": "e2e-3",
+      "createdAt": "2026-08-08T20:22:57.823Z"
     }
   ]
 }
