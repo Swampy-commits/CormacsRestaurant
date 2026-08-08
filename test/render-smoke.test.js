@@ -23,6 +23,12 @@ const BOOKINGS = [
   { id: 'INSID4', date: SOON, slot: '15:00', area: 'inside', name: 'Nana', party: 4 },
 ];
 
+// Pin the token state rather than inheriting whatever js/config.js happens to hold. Without this,
+// these tests pass or fail depending on whether a real token has been pasted into the config,
+// which is not something a test should care about. A dummy value is enough: nothing here books,
+// and hasToken() only checks that the list isn't empty.
+CONFIG.tokenParts = ['not-a-real-token'];
+
 const bookingPage = installFakeDom({
   containers: [
     'topbar',
@@ -69,6 +75,29 @@ function settle() {
 function focus(page) {
   globalThis.document = page;
   return page;
+}
+
+/**
+ * Drive the party stepper to a given size, the way a finger would.
+ *
+ * The rendered page is shared between these tests, so anything that changes it says so here
+ * rather than leaving the next test to inherit a party of 12.
+ */
+function setParty(size) {
+  focus(bookingPage);
+
+  const buttons = bookingPage.getElementById('controls').findAll('btn');
+  const up = buttons.find((button) => button.textContent === '+');
+  const down = buttons.find((button) => button.textContent === '-');
+  const current = () => Number.parseInt(bookingPage.getElementById('party-readout').textContent, 10);
+
+  let guard = 0;
+  while (current() !== size && guard < 100) {
+    (current() < size ? up : down).dispatch('click');
+    guard += 1;
+  }
+
+  assert.equal(current(), size, `could not set the party to ${size}`);
 }
 
 // --- The booking page -----------------------------------------------------------------------
@@ -134,12 +163,7 @@ test('a full area reads FULL while the other area stays open', () => {
 test('a party too big for inside is told so, and outside is unaffected', () => {
   // Twelve people cannot sit inside at all - the area only has ten seats - so that button must
   // explain itself rather than just greying out.
-  focus(bookingPage);
-
-  const partyUp = bookingPage.getElementById('controls').findAll('btn').find((b) => b.textContent === '+');
-  assert.ok(partyUp, 'no party stepper');
-
-  for (let i = 0; i < 10; i += 1) partyUp.dispatch('click'); // 2 -> 12
+  setParty(12);
 
   const tile = bookingPage
     .getElementById('slots')
@@ -161,18 +185,23 @@ test('a sprite is drawn for the chef and for the cash pile', () => {
   assert.match(bookingPage.getElementById('cash-pile').children[0].innerHTML, /^<svg/);
 });
 
-test('with no token configured the page says so and every booking button is dead', () => {
-  assert.ok(
-    bookingPage.getElementById('message').textContent.includes('NOT PLUGGED IN'),
-    'expected the no-token notice',
-  );
+test('a free area is bookable while a full one is not', () => {
+  setParty(2);
 
-  const buttons = bookingPage.getElementById('slots').findAll('btn');
-  assert.ok(buttons.length > 0, 'no booking buttons rendered');
-  assert.ok(
-    buttons.every((button) => button.disabled),
-    'a booking button was live despite there being no token',
-  );
+  const tile = bookingPage
+    .getElementById('slots')
+    .findAll('tile')
+    .find((node) => node.textContent.includes('15:00'));
+
+  const buttons = tile.findAll('btn');
+  const inside = buttons.find((button) => button.textContent === 'INSIDE');
+  const full = buttons.find((button) => button.textContent === 'FULL');
+
+  assert.ok(inside, 'inside has six seats free and should be offered');
+  assert.equal(inside.disabled, false, 'inside should be bookable');
+
+  assert.ok(full, 'outside is full and should say so');
+  assert.equal(full.disabled, true, 'a full area must not be pressable');
 });
 
 test('the page offers a way to cancel with a code from another device', () => {
