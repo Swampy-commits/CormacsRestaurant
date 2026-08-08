@@ -2,6 +2,16 @@
   "version": 1,
   "bookings": [
     {
+      "id": "YGFWCN",
+      "date": "2026-08-09",
+      "slot": "08:00",
+      "area": "inside",
+      "name": "Siobhan Twomey",
+      "party": 5,
+      "clientRef": "mskugjk1-4zptm0",
+      "createdAt": "2026-08-08T20:46:50.315Z"
+    },
+    {
       "id": "3NATFN",
       "date": "2026-08-09",
       "slot": "09:00",
