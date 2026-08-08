@@ -33,7 +33,7 @@ export const MENU = [
     ],
   },
   {
-    course: 'PUDDING',
+    course: 'DESSERTS',
     items: [
       { name: 'Ice Cream Mountain', price: 5, note: 'Three scoops, sprinkles, a flake.' },
       { name: 'Chocolate Cake', price: 4, note: 'Slice is huge.' },
@@ -89,7 +89,3 @@ export const GUESTS = [
     quote: 'I tried to buy the restaurant. He said no. Respect.',
   },
 ];
-
-// Shown on the hall of fame page. It matters that this is obviously a joke.
-export const GUESTS_DISCLAIMER =
-  'Every review on this page was made up by a ten year old. None of these people have been here. Yet.';

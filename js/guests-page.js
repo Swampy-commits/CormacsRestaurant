@@ -1,6 +1,6 @@
 // The hall of fame: famous guests, their sprites and their entirely invented reviews.
 
-import { GUESTS, GUESTS_DISCLAIMER } from './content.js';
+import { GUESTS } from './content.js';
 import { SPRITES, spriteSvg } from './sprites.js';
 import { el, fill, mountChrome } from './ui.js';
 
@@ -10,8 +10,6 @@ fill(
   document.getElementById('guests'),
   GUESTS.map((guest) => el('article', { class: 'guest' }, [art(guest), ...details(guest)])),
 );
-
-fill(document.getElementById('disclaimer'), [el('p', { class: 'tiny', text: GUESTS_DISCLAIMER })]);
 
 /**
  * A guest's picture: their own image if one has been added to /images, otherwise the pixel
