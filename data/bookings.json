@@ -1,4 +1,15 @@
 {
   "version": 1,
-  "bookings": []
+  "bookings": [
+    {
+      "id": "9WCWE7",
+      "date": "2026-08-11",
+      "slot": "15:00",
+      "area": "inside",
+      "name": "End to end test",
+      "party": 4,
+      "clientRef": "e2e-1",
+      "createdAt": "2026-08-08T20:22:37.484Z"
+    }
+  ]
 }
