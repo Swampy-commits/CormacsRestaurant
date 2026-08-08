@@ -35,8 +35,9 @@ browser ──opens an issue──▶ GitHub issue
 The browser's only privileged action is opening an issue. Everything that decides whether a table
 is free happens inside the Action, where the client cannot interfere.
 
-A booking takes 20–40 seconds, because that is how long an Action takes to start, run and push.
-The page shows a spinner and narrates the kitchen while it waits.
+A booking takes as long as an Action needs to start, run and push — measured at 10–13 seconds on
+this repository, though a busy runner queue can make it longer. The page shows a spinner and
+narrates the kitchen while it waits, and gives up after 90 seconds with a link to the request.
 
 ### Why the confirmation and the availability come from different places
 
@@ -87,7 +88,11 @@ but the booking buttons stay dead and say so.
 ### 3. Check it
 
 Open the site, book a table, and watch the Actions tab. You should get a booking code within about
-40 seconds, and the issue should close itself with a confirmation comment.
+15 seconds, and the issue should close itself with a confirmation comment.
+
+Booking in bursts makes Pages cancel its own in-flight builds, so *availability* for everyone else
+can lag by a minute or two after several quick bookings. Confirmations are unaffected — they come
+from the issue, not from Pages.
 
 ## The token, honestly
 

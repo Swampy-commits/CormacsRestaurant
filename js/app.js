@@ -540,7 +540,7 @@ function showWaiting(what) {
       el('span', { class: 'spinner' }, [el('span'), el('span'), el('span')]),
       'PLACING ORDER',
     ]),
-    el('span', { text: `${what}. This takes about half a minute.` }),
+    el('span', { text: `${what}. Usually about 15 seconds.` }),
     el('br'),
     line,
   ]);

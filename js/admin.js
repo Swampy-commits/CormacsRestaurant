@@ -168,7 +168,7 @@ async function cancel(booking) {
   state.busy = true;
   render();
   show(
-    banner('CANCELLING', `Freeing ${label}. This takes about half a minute.`, {
+    banner('CANCELLING', `Freeing ${label}. Usually about 15 seconds.`, {
       ok: true,
     }),
   );
