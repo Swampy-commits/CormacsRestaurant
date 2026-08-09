@@ -40,6 +40,16 @@
       "party": 3,
       "clientRef": "msl1wkiu-wdy8rp",
       "createdAt": "2026-08-09T00:15:14.100Z"
+    },
+    {
+      "id": "TBG8BW",
+      "date": "2026-08-10",
+      "slot": "09:00",
+      "area": "outside",
+      "name": "Catherine",
+      "party": 3,
+      "clientRef": "msl3bvgx-mbfus2",
+      "createdAt": "2026-08-09T00:55:07.213Z"
     }
   ]
 }
